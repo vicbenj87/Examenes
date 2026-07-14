@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Examen IBM Pontevedra · Éxodo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #1e2b3c 0%, #0f1a26 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+      padding: 1.5rem;
+      margin: 0;
+      animation: backgroundPulse 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes backgroundPulse {
+      0% { background: linear-gradient(145deg, #1e2b3c 0%, #0f1a26 100%); }
+      100% { background: linear-gradient(145deg, #1e3348 0%, #0a1520 100%); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      background: rgba(255, 248, 240, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 3.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 215, 150, 0.25);
+      transition: all 0.3s ease;
+      animation: cardEntry 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @keyframes cardEntry {
+      0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.2rem;
+    }
+
+    .header h1 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #e6c27a, #d4a44c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 4px 6px black);
+      margin-bottom: 0.25rem;
+    }
+
+    .header .subtitle {
+      color: #c0b09a;
+      font-weight: 400;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .progress-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #dba851, #f5e17b);
+      border-radius: 30px;
+      transition: width 0.5s ease;
+      box-shadow: 0 0 12px #f0b34b;
+    }
+
+    .question-counter {
+      color: #f5e3c1;
+      font-weight: 600;
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      backdrop-filter: blur(4px);
+    }
+
+    .card {
+      background: rgba(10, 20, 30, 0.7);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem;
+      border: 1px solid rgba(220, 190, 120, 0.25);
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.7);
+      animation: questionFade 0.5s ease;
+    }
+
+    @keyframes questionFade {
+      0% { opacity: 0; transform: translateX(15px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    .question-text {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #f7efdb;
+      margin-bottom: 2rem;
+      line-height: 1.4;
+      text-shadow: 0 2px 5px black;
+      word-break: break-word;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(230, 200, 140, 0.3);
+      border-radius: 1.8rem;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #ede0cc;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(6px);
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .option-btn:hover {
+      background: rgba(220, 180, 90, 0.18);
+      border-color: #dba851;
+      transform: translateX(8px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      color: #fff3d6;
+    }
+
+    .option-btn.selected {
+      background: rgba(205, 155, 50, 0.25);
+      border-color: #f3b94e;
+      box-shadow: 0 0 25px #daa520;
+    }
+
+    .fill-input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin: 1rem 0 1.8rem;
+    }
+
+    .fill-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(200, 160, 70, 0.5);
+      border-radius: 2rem;
+      padding: 1rem 1.5rem;
+      font-size: 1.2rem;
+      color: #f5e6c6;
+      outline: none;
+      transition: 0.25s;
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.5px;
+    }
+
+    .fill-input:focus {
+      border-color: #e9b13b;
+      box-shadow: 0 0 18px #d6972c;
+      background: rgba(20, 20, 20, 0.6);
+    }
+
+    .pista-badge {
+      color: #b9a577;
+      font-size: 0.9rem;
+      font-style: italic;
+      background: rgba(0,0,0,0.3);
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      align-self: flex-start;
+    }
+
+    .tf-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin: 1.8rem 0;
+    }
+
+    .tf-btn {
+      flex: 1;
+      background: rgba(20, 30, 40, 0.7);
+      border: 2px solid rgba(200, 160, 90, 0.5);
+      border-radius: 2.5rem;
+      padding: 1.2rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #efdbaf;
+      cursor: pointer;
+      transition: 0.3s;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+
+    .tf-btn:hover {
+      background: #b58b3a;
+      border-color: #f7cf7c;
+      color: #0a0f14;
+      transform: scale(1.02);
+    }
+
+    .tf-btn.selected {
+      background: #e7b13b;
+      border-color: #ffd966;
+      color: #11171f;
+      box-shadow: 0 0 30px #f3b33d;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .primary-btn {
+      background: #c69c4b;
+      border: none;
+      border-radius: 3rem;
+      padding: 0.9rem 2.2rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0f1a24;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      transition: 0.25s;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+      text-transform: uppercase;
+    }
+
+    .primary-btn:hover {
+      background: #e6b443;
+      box-shadow: 0 12px 28px #b88631;
+      transform: translateY(-2px);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      filter: grayscale(0.4);
+    }
+
+    .final-screen {
+      text-align: center;
+      animation: finalPop 0.7s ease;
+    }
+
+    @keyframes finalPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .score-circle {
+      font-size: 4.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f3cd70, #c49b3f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 1.2rem 0;
+    }
+
+    .message {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 1rem 0;
+    }
+
+    .restart-link {
+      color: #dba851;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 2rem;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 500px) {
+      .container { padding: 1.8rem 1rem; }
+      .question-text { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+  <div class="header">
+    <h1>ÉXODO</h1>
+    <div class="subtitle">IBM Pontevedra · Examen</div>
+  </div>
+
+  <!-- pantalla de preguntas -->
+  <div id="questionScreen">
+    <div class="progress-area">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+      </div>
+      <span class="question-counter" id="counterDisplay">1/35</span>
+    </div>
+    <div class="card" id="questionCard">
+      <div class="question-text" id="questionText"></div>
+      <div id="dynamicAnswers"></div>
+      <div class="nav-buttons">
+        <button class="primary-btn" id="nextBtn" disabled>Siguiente ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- pantalla de resultados -->
+  <div id="finalScreen" class="final-screen hidden">
+    <h2 style="color:#eedbba;">Resultado</h2>
+    <div id="finalScoreText" class="score-circle"></div>
+    <div id="finalMessage" class="message"></div>
+    <div id="finalDetail" style="color:#cdba8b; margin:1rem 0;"></div>
+    <span class="restart-link" id="restartBtn">↺ Realizar de nuevo</span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- BASE DE DATOS DEL EXAMEN ----------
+    const questions = [
+      // MULTIPLE CHOICE (1-14)
+      { type: 'multiple', question: '1. ¿Cuál es el personaje central de la era del éxodo?', options: ['a) Abraham', 'b) Josué', 'c) Moisés', 'd) David'], correct: 2 }, // índice 0-based: Moisés -> opción 2
+      { type: 'multiple', question: '2. ¿En qué lugar principal se desarrolla el inicio de esta era?', options: ['a) Canaán', 'b) Egipto', 'c) Babilonia', 'd) Jerusalén'], correct: 1 }, // Egipto
+      { type: 'multiple', question: '3. ¿Cuál es el resumen histórico de esta era?', options: ['a) El nacimiento del pueblo hebreo.', 'b) La conquista de la Tierra Prometida.', 'c) Dios libera al pueblo de la esclavitud y les da la Ley.', 'd) El periodo de los jueces en Israel.'], correct: 2 },
+      { type: 'multiple', question: '4. Según el libro de Números, ¿cuántos hombres de guerra salieron de Egipto?', options: ['a) 100,000', 'b) 600,000', 'c) 1,000,000', 'd) 3,000,000'], correct: 1 },
+      { type: 'multiple', question: '5. Estimando mujeres y niños, ¿cuál era la población total aproximada del éxodo?', options: ['a) 500,000 personas.', 'b) 1 millón de personas.', 'c) Entre 2.5 y 3 millones de personas.', 'd) 10 millones de personas.'], correct: 2 },
+      { type: 'multiple', question: '6. ¿Cuál fue el primer evento principal de esta era?', options: ['a) La Ley', 'b) La Liberación', 'c) Kades-barnea', 'd) El peregrinaje'], correct: 1 },
+      { type: 'multiple', question: '7. ¿Qué milagro permitió al pueblo escapar definitivamente del ejército egipcio?', options: ['a) Las diez plagas.', 'b) El agua convertida en sangre.', 'c) La división del mar Rojo.', 'd) La caída de los muros de Jericó.'], correct: 2 },
+      { type: 'multiple', question: '8. ¿En qué monte recibió Moisés los Diez Mandamientos?', options: ['a) Monte Nebo', 'b) Monte Carmelo', 'c) Monte Sinaí', 'd) Monte de los Olivos'], correct: 2 },
+      { type: 'multiple', question: '9. ¿Qué ubicación geográfica era la "entrada sur" a la Tierra Prometida?', options: ['a) Kades-barnea', 'b) El mar Rojo', 'c) Jericó', 'd) El río Jordán'], correct: 0 },
+      { type: 'multiple', question: '10. ¿Cuántos espías fueron enviados a reconocer la tierra de Canaán?', options: ['a) 2', 'b) 7', 'c) 10', 'd) 12'], correct: 3 },
+      { type: 'multiple', question: '11. ¿Qué dos espías dieron un informe positivo confiando en Dios?', options: ['a) Moisés y Aarón.', 'b) Josué y Caleb.', 'c) Gedeón y Sansón.', 'd) David y Salomón.', 'e) Josu y Manuel.'], correct: 1 }, // Josué y Caleb
+      { type: 'multiple', question: '12. ¿Cuál fue la consecuencia de la rebelión en Kades-barnea?', options: ['a) Regreso inmediato a Egipto.', 'b) 40 años de peregrinaje en el desierto.', 'c) Destrucción total por los gigantes.', 'd) Conquista inmediata de Jericó.'], correct: 1 },
+      { type: 'multiple', question: '13. ¿Dónde murió Moisés tras animar a la nueva generación?', options: ['a) En Egipto.', 'b) En el monte Sinaí.', 'c) Cerca de Jericó, al norte del mar Muerto.', 'd) Dentro de la Tierra Prometida.'], correct: 2 },
+      { type: 'multiple', question: '14. ¿Qué libros de la Biblia cubren la era del éxodo?', options: ['a) Génesis a Éxodo.', 'b) Éxodo a Deuteronomio.', 'c) Josué y Jueces.', 'd) Los libros de Crónicas.'], correct: 1 },
+
+      // FILL IN THE BLANKS (15-21)
+      { type: 'fill', question: '15. El éxodo fue un movimiento masivo de los israelitas al salir de la esclavitud en _______. (6 letras, comienza con M)', correct: 'Egipto', hint: '6 letras, comienza con M' },
+      { type: 'fill', question: '16. Por medio de Moisés, Dios da la _______ al pueblo hebreo. (3 letras)', correct: 'Ley', hint: '3 letras' },
+      { type: 'fill', question: '17. El río _______ se convirtió en sangre como una de las plagas. (4 letras)', correct: 'Nilo', hint: '4 letras' },
+      { type: 'fill', question: '18. La tierra de Canaán se describía como una tierra que fluye _______ y miel.', correct: 'leche', hint: '' },
+      { type: 'fill', question: '19. Diez de los espías informaron que la tierra era _______. (14 letras, comienza con In)', correct: 'inconquistable', hint: '14 letras, comienza con In' },
+      { type: 'fill', question: '20. Kades-barnea llegó a conocerse como el lugar de _______ contra Dios. (8 letras)', correct: 'rebelión', hint: '8 letras' },
+      { type: 'fill', question: '21. Moisés dio instrucción adicional al pueblo en el libro de _______. (12 letras)', correct: 'Deuteronomio', hint: '12 letras' },
+
+      // VERDADERO / FALSO (22-35) → guardamos true/false
+      { type: 'truefalse', question: '22. El éxodo incluía a 600,000 mujeres que podían tomar armas.', correct: true },
+      { type: 'truefalse', question: '23. El éxodo fue un movimiento fácil y sin complicaciones.', correct: false },
+      { type: 'truefalse', question: '24. Dios prometió bendecir al pueblo por la obediencia y maldecirlo por la desobediencia.', correct: true },
+      { type: 'truefalse', question: '25. La "imagen de Dios" en el hombre se refiere a características personales y espirituales, no físicas.', correct: true },
+      { type: 'truefalse', question: '26. Moisés lideró al pueblo durante la conquista de Canaán.', correct: false },
+      { type: 'truefalse', question: '27. Las plagas incluyeron ranas, piojos y la muerte del primogénito.', correct: true },
+      { type: 'truefalse', question: '28. El destino final que Dios tenía para ellos era la Tierra Prometida de Canaán.', correct: true },
+      { type: 'truefalse', question: '29. En Kades-barnea, la mayoría del pueblo decidió confiar en Dios y avanzar.', correct: false },
+      { type: 'truefalse', question: '30. La nueva generación que surgió en el desierto estaba dispuesta a seguir a sus líderes.', correct: true },
+      { type: 'truefalse', question: '31. El mar Rojo fue dividido por Manu al levantar la paleta.', correct: false },
+      { type: 'truefalse', question: '32. Abraham es considerado el "padre del pueblo hebreo".', correct: true },
+      { type: 'truefalse', question: '33. Jacob tuvo solo dos hijos, que formaron las tribus de Israel.', correct: false },
+      { type: 'truefalse', question: '34. José llegó a ser un gran líder en Egipto debido a su rectitud y la fidelidad de Dios.', correct: true },
+      { type: 'truefalse', question: '35. El periodo de esclavitud en Egipto duró cuatrocientos años.', correct: true }
+    ];
+
+    const TOTAL = questions.length;
+    let currentIndex = 0;
+    let userAnswers = new Array(TOTAL).fill(null); // almacena respuesta del usuario
+
+    // Elementos DOM
+    const questionScreen = document.getElementById('questionScreen');
+    const finalScreen = document.getElementById('finalScreen');
+    const questionText = document.getElementById('questionText');
+    const dynamicAnswers = document.getElementById('dynamicAnswers');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const counterDisplay = document.getElementById('counterDisplay');
+    const restartBtn = document.getElementById('restartBtn');
+    const finalScoreText = document.getElementById('finalScoreText');
+    const finalMessage = document.getElementById('finalMessage');
+    const finalDetail = document.getElementById('finalDetail');
+
+    // Renderiza pregunta actual
+    function renderQuestion() {
+      if (currentIndex >= TOTAL) {
+        showFinalResults();
+        return;
+      }
+
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      dynamicAnswers.innerHTML = '';
+      nextBtn.disabled = true;
+
+      // Actualizar progreso
+      const percent = ((currentIndex) / TOTAL) * 100;
+      progressFill.style.width = `${percent}%`;
+      counterDisplay.textContent = `${currentIndex + 1}/${TOTAL}`;
+
+      // Animación suave en la tarjeta
+      const card = document.getElementById('questionCard');
+      card.style.animation = 'none';
+      card.offsetHeight; // reflow
+      card.style.animation = 'questionFade 0.5s ease';
+
+      if (q.type === 'multiple') {
+        const grid = document.createElement('div');
+        grid.className = 'options-grid';
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement('div');
+          btn.className = 'option-btn';
+          btn.textContent = opt;
+          btn.dataset.optionIndex = idx;
+          if (userAnswers[currentIndex] === idx) {
+            btn.classList.add('selected');
+            nextBtn.disabled = false;
+          }
+          btn.addEventListener('click', (e) => {
+            // quitar selección anterior
+            grid.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            userAnswers[currentIndex] = idx;
+            nextBtn.disabled = false;
+          });
+          grid.appendChild(btn);
+        });
+        dynamicAnswers.appendChild(grid);
+      }
+      else if (q.type === 'fill') {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'fill-input-area';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'fill-input';
+        input.placeholder = 'Escribe tu respuesta...';
+        input.value = userAnswers[currentIndex] || '';
+        if (q.hint) {
+          const pista = document.createElement('span');
+          pista.className = 'pista-badge';
+          pista.textContent = `🔎 Pista: ${q.hint}`;
+          wrapper.appendChild(pista);
+        }
+        input.addEventListener('input', (e) => {
+          userAnswers[currentIndex] = e.target.value.trim();
+          nextBtn.disabled = (userAnswers[currentIndex] === '');
+        });
+        wrapper.appendChild(input);
+        dynamicAnswers.appendChild(wrapper);
+        nextBtn.disabled = (userAnswers[currentIndex] === null || userAnswers[currentIndex] === '');
+      }
+      else if (q.type === 'truefalse') {
+        const btnContainer = document.createElement('div');
+        btnContainer.className = 'tf-buttons';
+        const trueBtn = document.createElement('button');
+        trueBtn.className = 'tf-btn';
+        trueBtn.textContent = 'Verdadero';
+        const falseBtn = document.createElement('button');
+        falseBtn.className = 'tf-btn';
+        falseBtn.textContent = 'Falso';
+
+        if (userAnswers[currentIndex] === true) {
+          trueBtn.classList.add('selected');
+          nextBtn.disabled = false;
+        } else if (userAnswers[currentIndex] === false) {
+          falseBtn.classList.add('selected');
+          nextBtn.disabled = false;
+        }
+
+        trueBtn.addEventListener('click', () => {
+          trueBtn.classList.add('selected');
+          falseBtn.classList.remove('selected');
+          userAnswers[currentIndex] = true;
+          nextBtn.disabled = false;
+        });
+        falseBtn.addEventListener('click', () => {
+          falseBtn.classList.add('selected');
+          trueBtn.classList.remove('selected');
+          userAnswers[currentIndex] = false;
+          nextBtn.disabled = false;
+        });
+
+        btnContainer.appendChild(trueBtn);
+        btnContainer.appendChild(falseBtn);
+        dynamicAnswers.appendChild(btnContainer);
+      }
+    }
+
+    function normalizeString(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    function checkAnswer(questionObj, userAns) {
+      if (questionObj.type === 'multiple') {
+        return userAns === questionObj.correct;
+      } else if (questionObj.type === 'fill') {
+        if (userAns === null || userAns === '') return false;
+        return normalizeString(userAns) === normalizeString(questionObj.correct);
+      } else if (questionObj.type === 'truefalse') {
+        return userAns === questionObj.correct;
+      }
+      return false;
+    }
+
+    function calculateScore() {
+      let correctCount = 0;
+      for (let i = 0; i < TOTAL; i++) {
+        if (checkAnswer(questions[i], userAnswers[i])) correctCount++;
+      }
+      return correctCount;
+    }
+
+    function getMessage(percentage) {
+      if (percentage === 100) return 'Genial!!!';
+      if (percentage >= 81) return 'Buenisimooooo';
+      if (percentage >= 61) return 'Correcto';
+      if (percentage >= 51) return 'Podrías mejorar';
+      if (percentage === 50) return 'Safaste';
+      return 'Está mal';
+    }
+
+    function showFinalResults() {
+      questionScreen.classList.add('hidden');
+      finalScreen.classList.remove('hidden');
+      const correct = calculateScore();
+      const percentage = Math.round((correct / TOTAL) * 100);
+      finalScoreText.textContent = `${correct} / ${TOTAL} (${percentage}%)`;
+      finalMessage.textContent = getMessage(percentage);
+      finalDetail.textContent = `Respuestas correctas: ${correct} de ${TOTAL}.`;
+    }
+
+    function resetExam() {
+      currentIndex = 0;
+      userAnswers = new Array(TOTAL).fill(null);
+      finalScreen.classList.add('hidden');
+      questionScreen.classList.remove('hidden');
+      renderQuestion();
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < TOTAL) {
+        currentIndex++;
+        if (currentIndex < TOTAL) {
+          renderQuestion();
+        } else {
+          // última pregunta ya respondida, mostrar resultados
+          renderQuestion(); // mostrará la última, pero debemos forzar final
+          // En renderQuestion si currentIndex >= TOTAL llama a final. Mejor gestionamos aquí.
+          if (currentIndex >= TOTAL) {
+            showFinalResults();
+          } else {
+            renderQuestion();
+          }
+        }
+      }
+    });
+
+    restartBtn.addEventListener('click', resetExam);
+
+    // Iniciar
+    renderQuestion();
+  })();
+</script>
+</body>
+</html>
